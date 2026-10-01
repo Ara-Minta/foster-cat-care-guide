@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Foster Cat Care Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Atkinson+Hyperlegible:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#EAF0EE; --surface:#FFFFFF; --ink:#1F2A36; --muted:#56626F;
+  --accent:#E3A33B; --blue:#5F83A8; --blue-soft:#DCE6F0;
+  --alert:#B5473A; --alert-soft:#F6E1DD; --amber:#9A6412; --amber-soft:#FBEBCD;
+  --ok:#3E7A5A; --ok-soft:#DDEEE3; --line:#CAD5D1;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#141C22; --surface:#1E2A33; --ink:#E9EEF2; --muted:#A5B2BD;
+    --accent:#F0B44E; --blue:#8FB0D2; --blue-soft:#243646;
+    --alert:#F08F80; --alert-soft:#3A2522; --amber:#F0C06A; --amber-soft:#3A2F1C;
+    --ok:#8FCBA8; --ok-soft:#1F3328; --line:#30404C;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#141C22; --surface:#1E2A33; --ink:#E9EEF2; --muted:#A5B2BD;
+  --accent:#F0B44E; --blue:#8FB0D2; --blue-soft:#243646;
+  --alert:#F08F80; --alert-soft:#3A2522; --amber:#F0C06A; --amber-soft:#3A2F1C;
+  --ok:#8FCBA8; --ok-soft:#1F3328; --line:#30404C;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Atkinson Hyperlegible",system-ui,-apple-system,"Segoe UI",sans-serif;font-size:1.0625rem;line-height:1.6}
+.wrap{max-width:760px;margin:0 auto;padding:1.25rem 1.25rem 3rem}
+h1,h2,h3,h4{font-family:"Baloo 2","Trebuchet MS",system-ui,sans-serif;line-height:1.15;margin:0}
+h1{font-size:clamp(2rem,6vw,2.75rem);font-weight:800}
+h2{font-size:1.45rem;font-weight:700;margin:1.75rem 0 .8rem}
+h3{font-size:1.7rem;font-weight:700}
+h4{font-size:1.15rem;margin:1.3rem 0 .4rem}
+p{margin:.4rem 0}
+.muted{color:var(--muted)}
+button{font:inherit;color:inherit}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--blue);outline-offset:3px}
+
+.topbar{display:flex;align-items:center;gap:.6rem;min-height:2.6rem;margin-bottom:.4rem}
+.back{appearance:none;border:2px solid var(--line);background:var(--surface);border-radius:999px;padding:.3rem .9rem;cursor:pointer;font-weight:700}
+.home{appearance:none;border:none;background:none;cursor:pointer;color:var(--muted);margin-left:auto;text-decoration:underline}
+.crumbs{color:var(--muted);font-size:.95rem;margin-bottom:.3rem}
+
+.search{width:100%;font:inherit;padding:.8rem 1rem;border-radius:14px;border:2px solid var(--line);background:var(--surface);color:var(--ink);margin-top:1rem}
+.urgent{appearance:none;display:block;width:100%;text-align:left;cursor:pointer;margin-top:1rem;border:2px solid var(--alert);background:var(--alert-soft);border-radius:18px;padding:1rem 1.1rem}
+.urgent strong{font-family:"Baloo 2",system-ui,sans-serif;font-size:1.3rem;color:var(--alert);display:block}
+
+.stages{display:grid;grid-template-columns:repeat(2,1fr);gap:.9rem}
+@media (min-width:640px){.stages{grid-template-columns:repeat(4,1fr)}}
+.stage{appearance:none;border:2px solid var(--line);background:var(--surface);border-radius:22px;padding:1rem .75rem;cursor:pointer;text-align:center;display:flex;flex-direction:column;align-items:center;gap:.2rem}
+.stage:hover{border-color:var(--blue)}
+.stage[aria-pressed="true"]{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 14%,var(--surface))}
+.stage .art{height:78px;display:flex;align-items:flex-end;justify-content:center}
+.stage strong{font-family:"Baloo 2",system-ui,sans-serif;font-size:1.2rem;margin-top:.3rem}
+.stage span{font-size:.88rem;color:var(--muted)}
+.stages.small .stage{padding:.6rem .5rem}
+.stages.small .art{display:none}
+
+.chips{display:flex;flex-wrap:wrap;gap:.5rem}
+.chip{appearance:none;cursor:pointer;font-weight:700;border:2px solid var(--line);background:var(--surface);padding:.45rem 1rem;border-radius:999px}
+.chip:hover{border-color:var(--blue)}
+.chip[aria-selected="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+
+.list{display:flex;flex-direction:column;gap:.55rem;margin-top:1rem}
+.row{appearance:none;text-align:left;cursor:pointer;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:.8rem 1rem;display:flex;align-items:center;gap:.8rem}
+.row:hover{border-color:var(--blue)}
+.row .t{font-weight:700;display:block}
+.row .d{color:var(--muted);font-size:.93rem;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden}
+.row .tag{margin-left:auto;flex-shrink:0;font-size:.8rem;font-weight:700;padding:.15rem .55rem;border-radius:999px;background:var(--blue-soft);color:var(--blue)}
+.row .tag.tool{background:var(--amber-soft);color:var(--amber)}
+.row .tag.now{background:var(--alert-soft);color:var(--alert)}
+
+.panel{margin-top:1rem;background:var(--surface);border-radius:22px;padding:1.4rem 1.3rem 1.5rem;border:1px solid var(--line)}
+.panel ul,.panel ol{margin:0;padding-left:1.25rem;max-width:64ch}
+.panel li{margin:.35rem 0}
+.panel li::marker{color:var(--accent)}
+.quick{font-size:1.1rem;max-width:62ch;margin:.8rem 0 0}
+.applies{font-size:.9rem;color:var(--muted);margin-top:.2rem}
+.note{margin-top:1.1rem;background:var(--blue-soft);border-radius:12px;padding:.8rem 1rem}
+.note strong{color:var(--blue)}
+.vet{margin-top:1.3rem;background:var(--alert-soft);border-left:5px solid var(--alert);border-radius:12px;padding:.9rem 1.1rem}
+.vet h4{margin-top:0;color:var(--alert)}
+.vet li::marker{color:var(--alert)!important}
+.overview{max-width:62ch;margin:.6rem 0 0}
+
+.level{border-radius:16px;padding:1rem 1.1rem;margin-top:1rem}
+.level strong{font-family:"Baloo 2",system-ui,sans-serif;font-size:1.35rem;display:block}
+.level.emergency{background:var(--alert-soft);color:var(--alert);border:2px solid var(--alert)}
+.level.today{background:var(--amber-soft);color:var(--amber);border:2px solid var(--amber)}
+.level.watch{background:var(--ok-soft);color:var(--ok);border:2px solid var(--ok)}
+.level p{color:var(--ink)}
+
+label{display:block;font-weight:700;margin:.9rem 0 .3rem}
+input,select{font:inherit;padding:.6rem .8rem;border-radius:10px;border:2px solid var(--line);background:var(--bg);color:var(--ink);max-width:100%}
+.inline{display:flex;gap:.5rem;flex-wrap:wrap;align-items:end}
+.btn{appearance:none;cursor:pointer;font-weight:700;border:none;background:var(--ink);color:var(--bg);padding:.65rem 1.2rem;border-radius:999px}
+.btn.ghost{background:none;color:var(--muted);border:2px solid var(--line)}
+.result{margin-top:1rem;background:var(--blue-soft);border-radius:14px;padding:1rem 1.1rem}
+.result .big{font-family:"Baloo 2",system-ui,sans-serif;font-size:1.6rem;font-weight:800}
+.scroll{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:.95rem}
+th,td{text-align:left;padding:.45rem .6rem;border-bottom:1px solid var(--line);white-space:nowrap}
+.loss{color:var(--alert);font-weight:700}
+.gain{color:var(--ok);font-weight:700}
+
+.swatches{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:.6rem}
+.sw{appearance:none;cursor:pointer;border:2px solid var(--line);background:var(--bg);border-radius:14px;padding:.6rem .4rem;display:flex;flex-direction:column;align-items:center;gap:.3rem;font-size:.85rem;font-weight:700;text-align:center}
+.sw[aria-pressed="true"]{border-color:var(--accent)}
+.sw svg{display:block}
+.fade{animation:in .22s ease-out}
+@keyframes in{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.fade{animation:none}}
+.srcs{padding-left:1.1rem}
+.srcs li{margin:.55rem 0}
+.srcs a{color:var(--blue);font-weight:700}
+.ev{display:inline-block;margin-left:.4rem;font-size:.75rem;font-weight:700;padding:.05rem .5rem;border-radius:999px;background:var(--ok-soft);color:var(--ok)}
+.ev-shelter,.ev-vet{background:var(--blue-soft);color:var(--blue)}
+.ev-consumer{background:var(--amber-soft);color:var(--amber)}
+.org{display:block;font-size:.85rem;color:var(--muted)}
+.unverified{background:var(--amber-soft)}
+.unverified strong{color:var(--amber)}
+footer{margin-top:2.5rem;font-size:.9rem;color:var(--muted);max-width:60ch}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div id="app"></div>
+  <footer><span id="fb"></span>General guidance only. Always follow your foster organization's protocols and your veterinarian's advice for your specific animal.</footer>
+</div>
+
+<script>
+/* ---------- feedback link: paste your repo's "new issue" URL here ---------- */
+const FEEDBACK_URL = "";
+/* ---------- helpers ---------- */
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+function cat(scale,fill){const w=Math.round(64*scale),h=Math.round(60*scale);
+ return `<svg width="${w}" height="${h}" viewBox="0 0 64 60" aria-hidden="true"><path d="M8 22 L6 2 L24 14 Q32 11 40 14 L58 2 L56 22 Q62 32 58 44 Q50 58 32 58 Q14 58 6 44 Q2 32 8 22Z" fill="${fill}"/><ellipse cx="22" cy="32" rx="3.4" ry="4.4" fill="var(--surface)"/><ellipse cx="42" cy="32" rx="3.4" ry="4.4" fill="var(--surface)"/><path d="M29 41 L35 41 L32 45Z" fill="var(--accent)"/></svg>`;}
+
+const STAGES={
+ infant:{name:"Infant",plural:"infants",age:"0–4 weeks",art:()=>cat(.55,"var(--blue)")},
+ kitten:{name:"Kitten",plural:"kittens",age:"4 weeks–6 months",art:()=>cat(.85,"var(--blue)")},
+ cat:{name:"Adult cat",plural:"adult cats",age:"6 months and up",art:()=>cat(1.25,"var(--blue)")},
+ mother:{name:"Nursing mother",plural:"nursing moms",age:"Mom with babies",art:()=>cat(1.1,"var(--blue)")+cat(.45,"var(--accent)")+cat(.45,"var(--accent)")}
+};
+const ALL=["infant","kitten","cat","mother"];
+const CATS={general:"General care",health:"Health",behavior:"Behavior",enrichment:"Enrichment",household:"Household",tools:"Tools"};
+
+const OVERVIEW={
+ infant:{general:"Newborns can't stay warm, eat, or potty on their own. You're filling in for mom: warmth, round-the-clock feeding, and potty help.",health:"Infants decline fast. Daily weights are your early-warning system, and any kitten who stops gaining or eating needs help the same day.",behavior:"Mostly sleeping and eating, but developing fast. Gentle daily handling now builds a friendly cat later.",enrichment:"At this age enrichment means comfort: warmth, soft textures, and gentle handling.",household:"Keep infants in a warm, quiet, contained space away from other pets.",tools:"Calculators and charts for feeding, weights, stool, and age."},
+ kitten:{general:"Weaning, fast growth, and curiosity about everything. Focus on nutrition, kitten-proofing, and the vet schedule.",health:"Kittens are prone to contagious illness and parasites. Watch appetite and litter box daily and act quickly.",behavior:"The prime socialization window is about 2 to 7 weeks and matters for months after. Positive experiences now shape adoptability.",enrichment:"Kittens need lots of active play every day to burn energy and practice hunting.",household:"Quarantine first, then slow, supervised introductions to people and pets.",tools:"Calculators and charts for feeding, weights, stool, age, and vaccines."},
+ cat:{general:"Adult fosters often arrive stressed. A quiet starter room and a predictable routine help them settle.",health:"Cats hide illness well. Track eating, drinking, and litter box habits every day.",behavior:"Hiding is normal at first. Let the cat set the pace and learn their body language.",enrichment:"Daily play and a stimulating space reduce stress and help show their personality.",household:"Quarantine, then slow introductions to resident pets and family.",tools:"Charts and planners for adult fosters."},
+ mother:{general:"A nursing mom needs extra food, quiet, and privacy. Care for her well and she'll raise the kittens.",health:"Watch mom and babies. Kitten weights are the clearest sign mom's milk and health are on track.",behavior:"Moms are often protective. Respect her comfort level and keep things calm.",enrichment:"Low-key and on her terms. Most of all she needs rest and a place to get a break.",household:"Keep the nest private, away from other pets and visitors.",tools:"Track kitten weights and check stool and age milestones."}
+};
+
+/* ---------- topics ---------- */
+const T=[
+/* GENERAL */
+{id:"bottle",cat:"general",st:["infant","mother"],title:"Bottle feeding",kw:"formula kmr nipple bottle orphan",
+ quick:"Orphaned or supplemented infants need kitten milk replacer by bottle, belly-down, on a regular schedule. Never use cow's milk.",
+ steps:["Supplies: kitten bottles, spare nipples, kitten milk replacer (KMR or similar), a gram scale, and soft towels.","Mix formula exactly as the label says, refrigerate mixed formula, and follow the label for how long it keeps. Don't use homemade formula except in a short emergency.","Warm formula to 95–100°F in a warm water bath, not the microwave.","Warm the kitten first. Never feed a cold kitten.","Hold the kitten belly-down, head level, the way it would nurse from mom. Never feed on its back.","Feeding schedule: every 2 hours around the clock in week 1 (including overnight), every 2–3 hours in week 2, every 3–4 hours in week 3, and every 4–5 hours by week 4.","Let the kitten pull on the nipple; don't squeeze formula into the mouth. The nipple tip should not reach past the tongue.","Don't overfeed. Stop when the kitten slows down or turns away, and never give more than 4 mL per 100 g of body weight in one feeding. The belly should be round, not tight.","Burp by patting the back gently, wipe the face clean, then stimulate to potty.","If the nipple hole is too big, milk will pour out; too small and the kitten tires. Poke or cut it gradually."],
+ vet:["Milk bubbles from the nose repeatedly","Kitten won't suckle after being warmed","Coughing, wheezing, or noisy breathing after meals","Hard, bloated belly that doesn't soften"],src:["illinoisNeo","maddiesFeed","maddiesBottle"],
+ notes:{mother:"If mom's kittens aren't gaining, you may need to supplement with a bottle between nursing sessions."},rel:["overfeed","feedcalc","potty","warmth","fading"]},
+{id:"overfeed",cat:"general",st:["infant","mother"],title:"Overfeeding and aspiration",kw:"overfeeding too much formula bloat aspiration milk nose diarrhea",
+ quick:"Overfeeding is one of the most common bottle-baby problems. Too much formula at once can cause bloating, diarrhea, or milk getting into the lungs (aspiration), which can lead to pneumonia.",
+ steps:["Signs of overfeeding: a tight or bloated belly, milk bubbling from the nose, spitting up, gassiness, and loose yellow or green stool.","Keep each feeding at or under 4 mL per 100 g of body weight, the kitten's approximate stomach capacity.","Feed more often in smaller amounts rather than fewer, bigger meals.","Let the kitten set the pace. Don't squeeze the bottle or keep pushing the nipple after they slow down.","Weigh before and after feedings if you're unsure how much they took (1 g gained is about 1 mL).","Mix formula exactly to the label. Formula that's too concentrated acts like overfeeding.","If milk comes from the nose, stop, hold the kitten head-down briefly to drain, and resume more slowly."],
+ vet:["Coughing, wheezing, or crackly or fast breathing after feeds (possible aspiration)","Belly stays hard or swollen","Diarrhea lasting more than a day, or any weight loss"],
+ src:["maddiesFeed","maddiesBottle"],rel:["bottle","feedcalc","diarrhea","stool"]},
+{id:"weaning",cat:"general",st:["infant","kitten","mother"],title:"Weaning to solid food",kw:"gruel slurry wet food transition",
+ quick:"Start around 3½–4 weeks with a gruel of wet kitten food and formula, then thicken gradually until they eat plain food by about 6–8 weeks.",
+ steps:["Mix wet kitten food with warm formula into a soupy gruel in a shallow dish.","Offer a dab on your finger or a spoon, then lower it to the dish. Expect a mess.","Keep bottle feeding while they learn, and slowly offer the bottle less often.","Over 1–2 weeks, add less formula so the food gets thicker.","By 6–8 weeks they should eat wet and dry kitten food on their own, with fresh water always available.","Weigh daily during weaning. A small dip or stall is common; a drop of more than a day or two is not."],src:["maddiesFeed","merckCocci"],
+ vet:["Weight drops for two days in a row","Diarrhea lasting more than a day"],rel:["feedcalc","weights","stool","feeding"]},
+{id:"feeding",cat:"general",st:["kitten","cat","mother"],title:"Feeding weaned kittens and cats",kw:"diet food meals water",
+ quick:"Kittens eat kitten food 3–4 times a day until about 6 months. Adults do well on two meals. Nursing moms should free-feed kitten food.",
+ steps:["Wet food adds water to the diet, which helps with urinary health and hydration.","Change foods gradually over 7–10 days to avoid upset stomachs.","Keep fresh water available; many cats drink more from a fountain or wide bowl.","Skip cow's milk, dog food, onions, garlic, grapes, chocolate, and raw dough.","Keep food and water bowls away from the litter box.","For cats who stop eating: adults are at risk after 24 hours without food, and kittens under 6 weeks after just 12 hours."],src:["cornellAnorexia","cornellHL"],
+ notes:{mother:"Nursing moms can need two to three times their normal calories. Leave kitten food out at all times.",kitten:"Growing kittens need kitten-formulated food; adult food doesn't have enough calories and protein."},rel:["weaning","urinary","puzzles"]},
+{id:"potty",cat:"general",st:["infant"],title:"Potty stimulation",kw:"pee poop stimulate cotton",
+ quick:"Kittens under about 3–4 weeks can't pee or poop on their own. After every meal, gently rub the genitals with a warm damp cotton ball until they go.",
+ steps:["Use a warm, damp cotton ball, tissue, or soft cloth.","Gently rub in small circles or strokes over the genital area for 30–60 seconds.","Pale yellow urine is normal. Dark yellow can mean dehydration.","Clean and dry the area well to prevent sores.","The elimination reflex fades by about 5–6 weeks; most kittens go on their own by 3–4 weeks."],src:["maddiesFeed"],
+ vet:["No poop in 48 hours or a hard, swollen belly","No urine after stimulation for 12 hours","Red, raw, or swollen skin"],rel:["litter","stool","bottle"]},
+{id:"litter",cat:"general",st:["infant","kitten"],title:"Litter training",kw:"litter box training",
+ quick:"Around 3–4 weeks, offer a shallow box with non-clumping litter and set kittens in it after meals and naps.",
+ steps:["Use a low-sided box: a baking dish or box lid works well.","Non-clumping or pellet litter is safest until kittens stop tasting it.","Place kittens in the box after eating, waking, and playing.","Gently scratch the litter with a finger to show them.","Accidents are normal. Clean with an enzyme cleaner and keep the box close by."],rel:["potty","spraying"]},
+{id:"warmth",cat:"general",st:["infant","mother"],title:"Keeping kittens warm",kw:"heating pad temperature cold hypothermia",
+ quick:"Kittens can't regulate body temperature until about 4 weeks. A chilled kitten can't digest food, so warmth comes before feeding.",
+ steps:["Put a heating pad on low under half the carrier, covered with a towel, so kittens can move off it.","Target nest temperatures: 85–90°F in week 1, 79–84°F in weeks 2–3, and 73.5–79°F at week 4. Aim for 55–60% humidity.","Normal rectal temperature: 95–99°F at birth, 97–100°F at 2–3 weeks, 99–101°F at 4 weeks. Touch alone isn't reliable.","Cover part of the carrier to hold in warmth.","Too cold: crying, cold ears or mouth, sluggish. Too hot: spread out, panting, red skin.","Rewarm a chilled kitten slowly, over 1–4 hours, with a covered heat source. Warming too fast is also dangerous."],
+ vet:["Kitten stays cold or limp after warming","Temperature below 95°F or above about 101°F"],src:["maddiesTemp","maddiesCrit"],rel:["fading","bottle"]},
+{id:"grooming",cat:"general",st:ALL,title:"Bathing and grooming",kw:"bath brush clean nails",
+ quick:"Most fosters need spot-cleaning, not baths. When a bath is necessary, use warm water and dry completely.",
+ steps:["Wipe messy faces and bottoms with a warm damp cloth.","Bathe only when needed (heavy fleas, stuck-on poop). Use warm water and mild, unscented dish soap or a vet-approved shampoo.","Dry thoroughly with towels, then keep them warm until fully dry.","Brush adults as they allow. Short sessions with treats build tolerance.","Trim just the clear tip of the nails, avoiding the pink quick. Do one or two nails at a time if needed."],
+ notes:{infant:"Wet infants chill fast. Avoid full baths unless essential, and use a heating pad afterward."},rel:["fleas","warmth"]},
+/* HEALTH */
+{id:"fleas",cat:"health",st:ALL,title:"Fleas",kw:"parasites flea comb anemia",
+ quick:"Fleas cause itching and anemia, and they spread tapeworms. In tiny kittens, heavy fleas can be life-threatening.",
+ steps:["Check with a flea comb. Black specks that turn red on a wet paper towel are flea dirt.","Comb daily and drop fleas into soapy water.","Only use products labeled for the kitten's age and weight. Most preventives start at 8 weeks; a few are labeled younger.","Never use dog flea products on cats. Permethrin spot-ons can cause seizures and death, even from contact with a recently treated dog.","Wash bedding in hot water and vacuum often.","Treat for tapeworms if fleas were present."],
+ vet:["Pale gums or weakness","Heavy fleas on a kitten under 8 weeks","Tremors or drooling after any flea product"],src:["permethrin","capc"],
+ notes:{infant:"Don't use flea products without vet approval. A warm bath with mild dish soap and a flea comb is the usual approach; dry and warm them fully afterward.",mother:"Ask your vet which products are safe while nursing."},rel:["worms","grooming"]},
+{id:"worms",cat:"health",st:ALL,title:"Intestinal worms",kw:"roundworms tapeworms hookworms deworm parasites",
+ quick:"Most foster kittens have worms. Routine deworming is part of standard care.",
+ steps:["Roundworms look like spaghetti in stool or vomit and can cause a pot belly.","Tapeworm segments look like grains of rice near the tail or in stool. They come from swallowing fleas.","Hookworms cause dark stool and anemia.","Parasite guidelines recommend deworming kittens at 2, 4, 6, and 8 weeks, then monthly until 6 months, even if a fecal test is negative. Tapeworms need a different medicine.","Roundworms and hookworms can spread to people. Wash hands after litter and handling."],
+ notes:{infant:"Deworming starts at 2 weeks. Dose by weight on a gram scale, as directed by your vet.",mother:"Roundworms pass to kittens through milk. Guidelines recommend treating mom at the same time as her kittens."},src:["capc"],rel:["coccidia","vaccines","stool","fleas"]},
+{id:"coccidia",cat:"health",st:["infant","kitten","cat","mother"],title:"Coccidia and giardia",kw:"parasites diarrhea protozoa",
+ quick:"These microscopic parasites cause diarrhea that won't clear up on its own. They need a stool test and specific medication.",
+ steps:["Coccidia: watery or mucousy diarrhea, common in young kittens.","Giardia: greasy, very smelly, soft stool.","Bring a fresh stool sample to the vet.","Remove feces promptly. Coccidia eggs resist many disinfectants; steam cleaning and quick removal are the most reliable controls.","Bathe or wipe the hindquarters to prevent reinfection.","Keep affected kittens separate from others."],
+ vet:["Diarrhea for more than 24 hours","Signs of dehydration"],src:["merckCocci","aspcaCocci"],rel:["stool","diarrhea","dehydration","quarantine"]},
+{id:"earmites",cat:"health",st:["kitten","cat","mother"],title:"Ear mites",kw:"parasites ears head shaking",
+ quick:"Dark, coffee-ground debris in the ears with head shaking or scratching usually means ear mites.",
+ steps:["Check ears during handling.","Get a diagnosis and medication from the vet.","Treat every cat in the group; mites spread easily.","Wash bedding."],rel:["fleas","quarantine"]},
+{id:"vaccines",cat:"health",st:["infant","kitten","cat","mother"],title:"Vaccines and deworming schedule",kw:"fvrcp rabies shots vaccine schedule felv fiv",
+ quick:"Kittens get FVRCP every few weeks until 16–20 weeks, plus FeLV and rabies. Shelter protocols start earlier and repeat more often than pet-clinic schedules because exposure risk is higher.",
+ steps:["FVRCP protects against upper respiratory viruses and panleukopenia.","Pet guideline (AAHA/AAFP 2020): FVRCP no earlier than 6 weeks, then every 3–4 weeks until 16–20 weeks.","Shelter guideline: FVRCP at intake from 4 weeks of age, then every 2–3 weeks until 16–20 weeks.","Adults in shelters or foster: FVRCP at intake and again 2–3 weeks later.","FeLV is considered core for kittens: test first, then two doses 3–4 weeks apart starting as early as 8 weeks.","Rabies: a single dose no earlier than 12 weeks, following the label and local law.","Keep a written record for the adopter."],
+ notes:{mother:"Your vet will decide timing for mom. Her kittens start their own series on the schedule above."},src:["aaha","rcvs","asv"],rel:["vaxplan","worms","spay"]},
+{id:"uri",cat:"health",st:ALL,title:"Upper respiratory infection",kw:"uri sneezing cold eyes nose congestion",
+ quick:"Sneezing, runny eyes, and a stuffy nose are very common in fosters, often triggered by stress. Most cats recover with support, but not eating is a warning sign.",
+ steps:["Wipe eyes and nose with a warm damp cloth several times a day.","Run a hot shower and sit with them in the steamy bathroom for 10–15 minutes.","Warm wet food slightly so it smells stronger; cats won't eat what they can't smell.","Keep them separate from other cats and wash hands after handling.","Track eating and energy every day."],
+ vet:["Not eating","Thick green or yellow discharge","Breathing with mouth open or with effort","Eyes swollen shut or cloudy"],
+ notes:{infant:"Maddie's Fund scoring treats a kitten under 4 weeks who stops nursing as an emergency.",kitten:"Urgency rises the younger the kitten. A kitten under 4 weeks who stops eating needs emergency care."},src:["maddiesURI","cornellAnorexia"],rel:["dehydration","quarantine"]},
+{id:"ringworm",cat:"health",st:ALL,title:"Ringworm",kw:"fungus hair loss skin",
+ quick:"Ringworm is a skin fungus, not a worm. It causes circular, scaly patches of hair loss and can spread to people and pets.",
+ steps:["Common spots: ears, face, and paws.","Your vet can confirm with a special light or culture.","The best-studied shelter protocol pairs an oral antifungal (itraconazole or terbinafine) with twice-weekly lime sulfur dips.","Wear gloves, wash hands, and wash bedding in hot water.","Vacuum and clean surfaces often; spores linger.","Keep away from other pets and young children until cleared.","Treatment usually continues until fungal cultures come back negative."],src:["wavd","maddiesRing"],rel:["quarantine","kids"]},
+{id:"panleuk",cat:"health",st:ALL,title:"Panleukopenia",kw:"parvo virus distemper vomiting emergency",
+ quick:"A serious, highly contagious virus that causes sudden lethargy, vomiting, and diarrhea. Kittens are most at risk. It's an emergency.",
+ steps:["Signs: sudden lethargy, not eating, vomiting, foul or bloody diarrhea, fever or low temperature.","Isolate the sick cat and contact your vet or foster coordinator right away.","The virus can survive up to a year indoors. Remove organic material first, then use bleach at 1:32 (½ cup per gallon) for 10 minutes, or accelerated hydrogen peroxide at 1:16 for 5 minutes.","Recovered cats can shed virus for up to 6 weeks.","Vaccinated cats are protected. Unvaccinated cats should not enter the space."],src:["merckPanleuk"],
+ vet:["Any of these signs: go now"],rel:["vaccines","quarantine","dehydration"]},
+{id:"urinary",cat:"health",st:["kitten","cat","mother"],title:"Urinary issues",kw:"blockage straining pee bladder flutd uti crystals",
+ quick:"Straining in the litter box with little or no urine is an emergency, especially in male cats. A blockage can be fatal within 1–3 days, sometimes sooner.",
+ steps:["Signs: frequent trips to the box, straining, crying, blood in urine, licking the genitals, peeing outside the box.","Stress, crystals, and infections are common causes.","Encourage water: wet food, fountains, several water bowls.","Keep the litter box very clean and the routine calm.","Follow any prescribed diet exactly."],
+ vet:["Straining with little or no urine: go now","Blood in urine","Peeing in unusual places suddenly"],src:["icatUO","petmdUO"],rel:["spraying","feeding"]},
+{id:"dehydration",cat:"health",st:ALL,title:"Dehydration",kw:"skin tent gums fluids",
+ quick:"Kittens with diarrhea, vomiting, or poor appetite dehydrate quickly. Check hydration daily when they're sick.",
+ steps:["Skin tent: gently lift the skin at the back of the neck. It should snap back right away.","Gums should be moist and slick, not tacky.","Sunken eyes and lethargy are later signs.","Your vet may give fluids under the skin.","Offer wet food, water, and for infants keep feeding on schedule."],
+ vet:["Skin stays tented","Tacky gums or sunken eyes"],src:["merckPanleuk"],rel:["diarrhea","coccidia"]},
+{id:"diarrhea",cat:"health",st:ALL,title:"Diarrhea",kw:"loose stool poop runny",
+ quick:"Diarrhea is common in fosters from diet changes, stress, or parasites. In young kittens it can quickly cause dehydration.",
+ steps:["Compare the stool to the stool chart.","Check for recent diet changes or overfeeding.","Bring a fresh sample to the vet for parasite testing.","Keep the hindquarters clean and dry.","Watch hydration and weight closely."],
+ vet:["Lasts more than 24 hours","Blood, black stool, or vomiting","Lethargy or dehydration"],
+ notes:{infant:"Check that formula is mixed correctly. Overfeeding and too-rich formula are common causes."},src:["maddiesBottle","merckCocci"],rel:["stool","coccidia","worms","dehydration"]},
+{id:"fading",cat:"health",st:["infant"],title:"Fading kitten syndrome",kw:"emergency weak cold hypoglycemia",
+ quick:"A kitten who becomes weak, cold, and stops suckling is fading. This is an emergency: warm the kitten, raise blood sugar, and get help.",
+ steps:["Call your vet or foster coordinator right away.","Wrap the kitten in a towel with only the face showing and warm slowly on a covered heat source. Your body heat helps but isn't warm enough alone.","If the kitten is alert and responsive, rub a little white corn syrup on the gums with a cotton swab.","Never feed formula to a cold kitten; it can't digest it.","Keep the kitten wrapped and warm on the way to the vet."],
+ vet:["Weak, cold, limp, or not suckling: go now"],src:["maddiesBottle","maddiesCrit","maddiesTemp"],rel:["warmth","weights","bottle"]},
+{id:"momhealth",cat:"health",st:["mother"],title:"Mom health problems",kw:"mastitis eclampsia milk fever metritis",
+ quick:"Nursing moms can develop mastitis, milk fever, or uterine infections. Some become emergencies quickly.",
+ steps:["Normal: reddish-brown discharge for a few days to a few weeks after birth.","Mastitis: hard, hot, red, or painful mammary glands. Kittens may stop gaining.","Eclampsia (milk fever): panting and restlessness first, then tremors, stiff walking, and possibly seizures. Most common in the first 4 weeks after birth.","Don't give calcium supplements during pregnancy unless your vet prescribes them.","Uterine infection: foul discharge, fever, lethargy, not eating.","Weigh kittens daily. Poor gains often point to a problem with mom."],
+ vet:["Trembling, panting, stiffness, or seizures: go now","Hot or discolored mammary glands","Foul discharge or fever"],src:["merckEclampsia","davidson2012"],rel:["weights","bottle","protectivemom"]},
+{id:"spay",cat:"health",st:["kitten","cat","mother"],title:"Spay/neuter surgery",kw:"surgery fix spay neuter recovery",
+ quick:"Pediatric spay/neuter at 8 weeks or 2 pounds is endorsed by the AVMA and Association of Shelter Veterinarians. A vet makes the final call for each kitten.",
+ steps:["Follow your vet's fasting instructions before surgery; kittens fast for a shorter time than adults.","After surgery, keep them in a quiet, warm space and limit jumping.","Offer a small meal once they're alert.","Check the incision daily: a little redness is normal; swelling, discharge, or opening is not.","Use a cone if they lick the incision."],
+ vet:["Incision opens, oozes, or swells","Not eating the day after surgery"],
+ notes:{mother:"Mom is usually spayed after her kittens are weaned."},src:["asvSpay"],rel:["vaccines","spraying"]},
+/* BEHAVIOR */
+{id:"spraying",cat:"behavior",st:["kitten","cat"],title:"Spraying and peeing outside the box",kw:"marking urine inappropriate elimination",
+ quick:"Spraying is marking: a standing cat sprays a small amount on a vertical surface. Squatting and peeing elsewhere is usually a litter box or medical problem.",
+ steps:["Rule out a medical cause first, especially if the cat is straining.","Spay/neuter greatly reduces spraying.","Clean accidents with an enzyme cleaner; regular cleaners leave scent behind.","Stress triggers spraying: new pets, cats seen outside the window, changes in routine.","Litter box basics: one per cat plus one, scooped daily, unscented clumping litter, quiet location.","Avoid ammonia-based cleaners; they smell like urine to cats.","Pheromone diffusers may help. Never punish; it increases stress and fear."],
+ vet:["Straining or blood in urine","Sudden change in habits"],src:["aafpHouse","catfriendly"],rel:["urinary","introcat","spay"]},
+{id:"biting",cat:"behavior",st:["infant","kitten"],title:"Play biting and scratching people",kw:"bite nip rough play",
+ quick:"Kittens learn gentle play from littermates and mom. Teach them that hands aren't toys.",
+ steps:["Never play with bare hands or feet.","When they bite, go still, then redirect to a toy.","A kick toy they can grab and bunny-kick is ideal.","If biting continues, calmly end the play session.","Kittens raised in pairs learn bite control from each other."],
+ notes:{infant:"Bottle babies often miss these lessons. Start good habits now."},rel:["toys","playroutine"]},
+{id:"shy",cat:"behavior",st:["kitten","cat","mother"],title:"Shy or feral cats",kw:"socialize fearful hiding scared feral",
+ quick:"Fearful cats need a small space, a predictable routine, and patience. Kittens handled between about 2 and 7 weeks become much friendlier; older cats can still improve but take longer.",
+ steps:["Start in a small room with no hard-to-reach hiding spots, but provide a covered bed or box.","Sit quietly on the floor and read or talk softly.","Use food as a bonding tool: offer lickable treats from a spoon.","Use a wand toy to play from a distance before trying to touch.","Wrap a kitten in a towel for short, calm handling sessions.","Go at their pace. Look for small wins like eating in front of you.","For kittens, research shows more handling time (around 40 minutes a day versus 15) and several different handlers lead to friendlier adults."],src:["karsh","graham"],
+ notes:{mother:"With a feral mom, keep contact minimal and focus on socializing the kittens as they grow."},rel:["bodylang","toys"]},
+{id:"bodylang",cat:"behavior",st:["kitten","cat","mother"],title:"Reading body language",kw:"tail ears signals hiss",
+ quick:"Body language tells you when a cat wants interaction and when they need space.",
+ steps:["Friendly: tail up, slow blinks, head bunting, kneading, relaxed body.","Unsure: crouching, tail tucked, ears turned sideways.","Stressed or defensive: flattened ears, puffed or thrashing tail, hissing, growling.","A slow blink from you can help relax a cat.","Let the cat approach you and end interactions before they get overwhelmed."],rel:["shy","introcat"]},
+{id:"scratching",cat:"behavior",st:["kitten","cat"],title:"Scratching furniture",kw:"scratch post claws",
+ quick:"Scratching is normal and healthy. Give them better places to scratch rather than trying to stop it.",
+ steps:["Provide tall, sturdy vertical posts and flat horizontal scratchers.","Place them near sleeping spots and where they already scratch.","Rub catnip on posts and praise their use.","Cover off-limits spots temporarily with a blanket or double-sided tape.","Keep nails trimmed."],rel:["grooming","toys"]},
+{id:"protectivemom",cat:"behavior",st:["mother"],title:"Protective moms",kw:"growling nest moving kittens",
+ quick:"Some protectiveness is healthy. Give mom space and keep her environment calm.",
+ steps:["Some growling or swatting near the nest is normal.","A stressed mom may move her kittens. Reduce noise and traffic.","Limit visitors, especially the first two weeks.","As kittens grow, mom spends more time away from them. That's normal weaning.","Stress can reduce milk supply."],rel:["momhealth","shy"]},
+/* ENRICHMENT */
+{id:"comfort",cat:"enrichment",st:["infant"],title:"Comfort for infants",kw:"snuggle heartbeat plush",
+ quick:"Infants find comfort in warmth, soft textures, and gentle touch.",
+ steps:["Soft fleece blankets in different textures.","A snuggle toy or heartbeat plush, especially for single kittens.","Gentle stroking that mimics mom's grooming.","Quiet talking and normal household sounds at low volume."],rel:["warmth","toys"]},
+{id:"toys",cat:"enrichment",st:ALL,title:"Toys by age",kw:"play toys wand",
+ quick:"The right toy depends on age and ability.",
+ steps:["0–3 weeks: soft plush and warm snuggle toys only.","3–5 weeks: very light balls and feathers, supervised.","5 weeks–6 months: wand toys, crinkle balls, ping-pong balls, tunnels, kick toys.","Adults: wand toys, puzzle feeders, catnip or silvervine toys.","Rotate toys every few days to keep them interesting.","Put away strings, ribbons, and wand toys after play; they can be swallowed."],rel:["diy","playroutine"]},
+{id:"diy",cat:"enrichment",st:["kitten","cat","mother"],title:"DIY enrichment",kw:"homemade cheap toys box",
+ quick:"Great enrichment doesn't have to cost anything.",
+ steps:["Cardboard boxes with holes cut in the sides.","Paper bags with handles removed.","Toilet paper tubes with treats inside, ends folded.","A ping-pong ball in an empty bathtub.","Crumpled paper balls.","A clean sock filled with catnip and knotted."],rel:["toys","puzzles"]},
+{id:"playroutine",cat:"enrichment",st:["kitten","cat"],title:"Daily play routine",kw:"play schedule hunt",
+ quick:"Two or three play sessions of 10–15 minutes a day keep cats happy and calm.",
+ steps:["Move the wand toy like prey: hiding, darting, pausing.","Let them catch it often so they don't get frustrated.","Wind down slowly at the end.","Finish with a meal or treat to complete the hunt-catch-eat cycle.","Play before bedtime to reduce nighttime zoomies."],rel:["toys","biting"]},
+{id:"puzzles",cat:"enrichment",st:["kitten","cat","mother"],title:"Food puzzles",kw:"feeder slow feeding",
+ quick:"Food puzzles add mental work to mealtime and slow down fast eaters.",
+ steps:["Start easy: scatter kibble on a tray.","Try a muffin tin with kibble under ping-pong balls.","Egg cartons or treat balls.","Increase difficulty slowly so they don't give up."],rel:["diy","feeding"]},
+{id:"vertical",cat:"enrichment",st:["kitten","cat","mother"],title:"Vertical space and window views",kw:"cat tree perch shelves window",
+ quick:"Cats feel safer and more confident when they can climb and look out.",
+ steps:["A cat tree or cleared shelves.","A window perch; a bird feeder outside adds entertainment.","Hiding spots at different heights.","For moms: a perch the kittens can't reach gives her a break."],rel:["toys","protectivemom"]},
+/* HOUSEHOLD */
+{id:"room",cat:"household",st:ALL,title:"Setting up the foster room",kw:"setup supplies space room",
+ quick:"A small, easy-to-clean room is the best start for any foster.",
+ steps:["A bathroom or spare room with cleanable floors works well.","Supplies: food and water bowls, litter box, bedding, a hiding box, toys, and a carrier left open.","Block gaps behind appliances and under furniture.","Hide cords, strings, and small objects.","Keep food and water away from the litter box."],
+ notes:{infant:"Use a carrier or playpen inside the room with a heating pad."},rel:["quarantine","warmth"]},
+{id:"quarantine",cat:"household",st:ALL,title:"Quarantine and hygiene",kw:"isolation clean bleach separate",
+ quick:"Keep new fosters separate from your pets for about two weeks and clean carefully between groups.",
+ steps:["Separate room for about two weeks.","Wash hands before and after handling.","Use dedicated towels and bowls, and wear an overshirt or smock you leave in the room.","Care for healthy animals first and sick ones last.","Clean with bleach at 1:32 for 10 minutes or accelerated hydrogen peroxide at 1:16 for 5 minutes, after removing visible dirt.","Make sure your own pets are vaccinated."],src:["merckPanleuk"],rel:["introcat","ringworm","panleuk"]},
+{id:"introcat",cat:"household",st:["kitten","cat","mother"],title:"Introducing a new cat",kw:"introduce resident cat meet",
+ quick:"Slow introductions prevent fights and stress. Plan on days to weeks.",
+ steps:["After quarantine, start with scent: swap bedding or rub a sock on each cat's cheeks.","Feed on opposite sides of a closed door.","Swap rooms so each can explore the other's scent.","Next, let them see each other through a baby gate or cracked door.","Then short, supervised visits with play and treats.","If you see hissing or growling beyond mild grumbling, go back a step."],
+ notes:{mother:"Nursing moms and young kittens should stay separate from resident cats."},src:["catfriendly"],rel:["quarantine","bodylang","dogs"]},
+{id:"dogs",cat:"household",st:["kitten","cat"],title:"Fosters and dogs",kw:"dog introduce",
+ quick:"Many cats and dogs get along, but introductions must be slow and supervised.",
+ steps:["Keep the dog on a leash for early meetings.","Make sure the cat has high escape spots.","Reward the dog for calm behavior.","Never leave them alone together until fully trusted.","Dogs with a strong chase drive shouldn't be around kittens.","If the dog uses a permethrin flea product, keep cats away from it; contact with a treated dog can poison cats."],src:["permethrin"],rel:["introcat","bodylang"]},
+{id:"kids",cat:"household",st:ALL,title:"How kids can help",kw:"children family jobs",
+ quick:"Fostering is a great family project. Give kids jobs that match their age, and always supervise.",
+ steps:["Under 5: supervised gentle petting while sitting on the floor.","Ages 5–8: filling water bowls, wand toy play, reading aloud to shy cats.","Ages 9–12: weighing and logging kittens, helping serve food.","Teens: supervised bottle feeding, socialization sessions, photos and adoption bios.","House rules: sit down to hold, use two hands, let the cat walk away, don't wake sleeping kittens, wash hands after.","Adults handle sick animals, medications, and litter for sick fosters."],
+ notes:{infant:"Infants are fragile. Kids can watch and help log weights while an adult handles them."},rel:["weights","ringworm","toys"]}
+];
+
+/* ---------- tools ---------- */
+const TOOLS=[
+ {id:"feedcalc",title:"Feeding calculator",d:"Enter weight, get formula amount and schedule",st:["infant","kitten","mother"],src:["maddiesFeed"]},
+ {id:"weights",title:"Weight tracker",d:"Log daily weights and spot problems early",st:["infant","kitten","mother"],src:["dvm360","maddiesFeed"]},
+ {id:"stool",title:"Stool chart",d:"What their poop is telling you",st:ALL},
+ {id:"age",title:"Age estimator",d:"Estimate age from milestones",st:["infant","kitten"]},
+ {id:"vaxplan",title:"Vaccine and deworming planner",d:"Get dates from birth date or age",st:["infant","kitten","cat"],src:["aaha","asv","capc"]}
+];
+
+/* ---------- triage ---------- */
+const LV={emergency:"Emergency: go to a vet now",today:"Call your vet today",watch:"Watch closely at home"};
+const SYM=[
+ {id:"diarrhea",label:"Diarrhea",lv:{infant:"today",kitten:"watch",cat:"watch",mother:"watch"},
+  now:["Check the stool chart to describe it to your vet.","Check hydration: skin tent and gums.","Keep the bottom clean and dry.","Save a fresh sample for the vet."],go:["Blood or black, tarry stool","Vomiting too, or very tired","Lasts more than 24 hours (12 for young kittens)"],rel:["stool","diarrhea","coccidia"]},
+ {id:"noeat",label:"Not eating",lv:{infant:"emergency",kitten:"today",cat:"today",mother:"today"},
+  now:["Warm wet food to boost smell.","Check for congestion; wipe the nose.","Note when they last ate."],go:["Infant won't suckle","Kitten under 6 weeks hasn't eaten in 12 hours","Adult hasn't eaten in 24 hours"],rel:["uri","fading","dehydration"]},
+ {id:"vomit",label:"Vomiting",lv:{infant:"today",kitten:"today",cat:"watch",mother:"today"},
+  now:["Remove food for a couple of hours, but leave water.","Look for worms, hair, or foreign objects in the vomit.","Offer a small meal later."],go:["Repeated vomiting","Blood in vomit","Can't keep water down or seems weak"],rel:["panleuk","worms","dehydration"]},
+ {id:"pee",label:"Straining to pee or no urine",lv:{infant:"today",kitten:"emergency",cat:"emergency",mother:"emergency"},
+  now:["Watch the litter box to see if any urine comes out.","Check for clumps in the litter.","Note how often they're trying."],go:["Male cat straining with little or no urine","Crying in the litter box","Vomiting along with straining"],rel:["urinary","potty"]},
+ {id:"sneeze",label:"Sneezing or runny eyes",lv:{infant:"today",kitten:"watch",cat:"watch",mother:"watch"},
+  now:["Wipe eyes and nose with a warm damp cloth.","Try a steamy bathroom for 10–15 minutes.","Separate from other cats."],go:["Not eating","Breathing with effort or mouth open","Eyes swollen shut"],rel:["uri"]},
+ {id:"weak",label:"Weak, cold, or limp",lv:{infant:"emergency",kitten:"emergency",cat:"today",mother:"emergency"},
+  now:["Wrap in a towel and warm slowly on a covered heat source.","For kittens who are alert: rub a little white corn syrup on the gums.","Don't feed a cold kitten.","Call your vet or foster coordinator now."],go:["Doesn't improve within minutes of warming","Cold to the touch","Unresponsive"],rel:["fading","warmth","panleuk"]},
+ {id:"breath",label:"Trouble breathing",lv:{infant:"emergency",kitten:"emergency",cat:"emergency",mother:"emergency"},
+  now:["Keep them calm and still.","Go to a vet right away."],go:["Open-mouth breathing","Belly heaving","Blue or pale gums"],rel:["uri","bottle"]},
+ {id:"nose",label:"Milk from the nose while feeding",lv:{infant:"watch"},
+  now:["Stop feeding and hold the kitten head-down briefly so fluid drains.","Check the nipple hole isn't too big.","Feed slower, belly-down."],go:["Coughing or wheezing afterward","Noisy or fast breathing"],rel:["bottle"]},
+ {id:"bloat",label:"Bloated or tight belly after feeding",lv:{infant:"watch"},
+  now:["Skip or shrink the next feeding until the belly softens.","Burp the kitten and gently stimulate to potty.","Next time feed smaller amounts, within 4 mL per 100 g of body weight."],go:["Belly stays hard for several hours","Vomiting, crying, or labored breathing","Not pooping in 48 hours"],rel:["overfeed","bottle"]},
+ {id:"seizure",label:"Trembling or seizure",lv:{infant:"emergency",kitten:"emergency",cat:"emergency",mother:"emergency"},
+  now:["Move objects away; don't hold the mouth.","Time the episode.","Go to a vet right away."],go:["Any seizure"],rel:["momhealth","fading"]},
+ {id:"hairloss",label:"Circular hair loss patches",lv:{infant:"watch",kitten:"watch",cat:"watch",mother:"watch"},
+  now:["Separate from other pets and kids.","Wear gloves and wash bedding in hot water.","Schedule a vet visit this week."],go:["Spreading quickly or skin is raw"],rel:["ringworm","quarantine"]},
+ {id:"fleas",label:"Fleas",lv:{infant:"today",kitten:"watch",cat:"watch",mother:"watch"},
+  now:["Flea comb and drop fleas into soapy water.","Wash bedding in hot water.","Check gums: they should be pink."],go:["Pale gums","Weakness or lethargy"],rel:["fleas","worms"]},
+ {id:"worms",label:"Worms in stool or vomit",lv:{infant:"today",kitten:"watch",cat:"watch",mother:"watch"},
+  now:["Note what they look like: spaghetti or rice grains.","Contact your vet or coordinator for dewormer.","Wash hands after cleaning up."],go:["Pot belly with lethargy","Pale gums"],rel:["worms","fleas"]},
+ {id:"mammary",label:"Hot, hard, or red mammary glands",lv:{mother:"today"},
+  now:["Check whether kittens are gaining weight.","Supplement kittens with a bottle if they aren't gaining.","If mom is also panting or trembling, that's a different emergency: go now."],go:["Mom stops eating or has a fever","Glands turn dark or open"],rel:["momhealth","bottle"]},
+ {id:"outside",label:"Peeing or spraying outside the box",lv:{kitten:"watch",cat:"watch"},
+  now:["Watch for straining; that changes everything.","Clean with an enzyme cleaner.","Review the litter box setup."],go:["Straining or blood in urine"],rel:["spraying","urinary"]},
+ {id:"hiding",label:"Hiding and won't come out",lv:{kitten:"watch",cat:"watch",mother:"watch"},
+  now:["Give them time and a covered hiding spot.","Keep food, water, and litter nearby.","Sit quietly in the room daily."],go:["Not eating for 24 hours","Hiding along with other symptoms"],rel:["shy","bodylang"]}
+];
+
+
+/* ---------- sources ---------- */
+const EV={guide:"Peer-reviewed guideline",study:"Peer-reviewed research",ref:"Peer-reviewed vet reference",vet:"Veterinary school or specialist",shelter:"Shelter medicine resource",consumer:"Vet-reviewed consumer article"};
+const SRC={
+ aaha:{t:"2020 AAHA/AAFP Feline Vaccination Guidelines: vaccination schedule table",o:"American Animal Hospital Association & American Association of Feline Practitioners",ev:"guide",u:"https://aaha.org/wp-content/uploads/globalassets/02-guidelines/feline-vaccination-guidlines/feline-vaccine-table.pdf"},
+ rcvs:{t:"Feline vaccination guideline comparison (AAHA/AAFP 2020, WSAVA, AAFP 2013)",o:"RCVS Knowledge",ev:"guide",u:"https://infocus.rcvsknowledge.org/wp-content/uploads/2020/11/Feline-Vaccination-Guideline-Recommendations-Comparison-tables.pdf"},
+ asv:{t:"Cat vaccinations in shelters (summarizing 2022 ASV Guidelines and AAFP shelter recommendations)",o:"University of Florida shelter medicine course",ev:"shelter",u:"https://ufl.pb.unizin.org/integratingveterinarymedicinewithsheltersystems/chapter/cat-vaccinations/"},
+ capc:{t:"Parasite control update: deworming at 2, 4, 6, 8 weeks, then monthly to 6 months; treat nursing mothers with litters",o:"Canadian Veterinary Medical Association (BC)",ev:"guide",u:"https://www.canadianveterinarians.net/media/ogndcl1n/bc-vets-parasites-and-vbdz-update-apr-26-2026-to-share.pdf"},
+ maddiesFeed:{t:"Practical Tips for Orphaned Kitten Care (feeding and stomach capacity table, based on Lawler, Theriogenology)",o:"Maddie's Fund",ev:"shelter",u:"https://www.maddiesfund.org/assets/documents/Institute/Practical%20Tips%20for%20Orphaned%20Kitten%20Care%20Resources.pdf"},
+ illinoisNeo:{t:"Caring for orphans: neonatal feeding frequency and care",o:"University of Illinois, Animal Sciences course materials",ev:"vet",u:"https://cdn.citl.illinois.edu/courses/ANSC207/week8/NeonatalCare/web_data/file7.htm"},
+ maddiesTemp:{t:"Kitten and Puppy Temperature Chart (from Small Animal Pediatrics, Peterson & Kutzler; Casal)",o:"Maddie's Fund",ev:"shelter",u:"https://www.maddiesfund.org/assets/documents/Institute/Kitten%20and%20Puppy%20Temperature%20Chart.pdf"},
+ maddiesBottle:{t:"Kitten and Puppy Bottle Feeding Problems and Solutions",o:"Maddie's Fund",ev:"shelter",u:"https://www.maddiesfund.org/assets/documents/Institute/Orphaned%20Kittens%20Common%20Feeding%20Issues%20and%20Solutions.pdf"},
+ maddiesCrit:{t:"Critical Care of the Neonatal Kitten (Q&A)",o:"Maddie's Institute",ev:"shelter",u:"https://www.maddiesfund.org/assets/documents/Institute/Critical%20Care%20Kitten%20QA.pdf"},
+ maddiesURI:{t:"Kitten URI Scoring Chart",o:"Maddie's Fund",ev:"shelter",u:"https://www.maddiesfund.org/assets/documents/Institute/Kitten%20URI%20Scoring%20Chart_v10-.pdf"},
+ dvm360:{t:"Caring for and feeding orphaned puppies and kittens (conference proceedings)",o:"dvm360",ev:"vet",u:"https://www.dvm360.com/view/caring-and-feeding-orphaned-puppies-and-kittens-proceedings"},
+ merckPanleuk:{t:"Feline Panleukopenia (professional version, peer reviewed, 2025)",o:"Merck Veterinary Manual",ev:"ref",u:"https://www.merckvetmanual.com/generalized-conditions/feline-panleukopenia/overview-of-feline-panleukopenia"},
+ merckCocci:{t:"Coccidiosis of Cats and Dogs (professional version)",o:"Merck Veterinary Manual",ev:"ref",u:"https://www.merckvetmanual.com/digestive-system/coccidiosis/coccidiosis-of-cats-and-dogs"},
+ aspcaCocci:{t:"Coccidia",o:"ASPCApro",ev:"shelter",u:"https://www.aspcapro.org/coccidia"},
+ merckEclampsia:{t:"Eclampsia in Small Animals (professional version)",o:"Merck Veterinary Manual",ev:"ref",u:"https://www.merckvetmanual.com/metabolic-disorders/disorders-of-calcium-metabolism/eclampsia-in-small-animals"},
+ davidson2012:{t:"Davidson AP. Reproductive causes of hypocalcemia. Topics in Companion Animal Medicine, 2012",o:"UC Davis Veterinary Medical Teaching Hospital",ev:"study",u:"https://confluence.cornell.edu/download/attachments/234029209/2012.Reproductive%20causes%20of%20hypocalcemia.pdf?api=v2"},
+ cornellAnorexia:{t:"Anorexia (loss of appetite)",o:"Cornell Feline Health Center",ev:"vet",u:"https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/anorexia"},
+ cornellHL:{t:"Hepatic Lipidosis",o:"Cornell Feline Health Center",ev:"vet",u:"https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/hepatic-lipidosis"},
+ icatUO:{t:"Urethral obstruction in cats",o:"International Cat Care",ev:"vet",u:"https://icatcare.org/?p=786"},
+ petmdUO:{t:"Urinary Blockage in Cats",o:"PetMD",ev:"consumer",u:"https://www.petmd.com/cat/emergency/how-prevent-urinary-blockage-cats"},
+ karsh:{t:"Casey RA & Bradshaw JWS. Effects of additional socialisation for kittens in a rescue centre. Applied Animal Behaviour Science, 2008 (reviews Karsh & Turner, 1988)",o:"University of Bristol",ev:"study",u:"https://Gwern.net/doc/cat/psychology/2008-casey.pdf"},
+ graham:{t:"Graham C et al. Understanding kitten fostering and socialisation practices. Animal Welfare, 2024",o:"University of Guelph",ev:"study",u:"https://www.cambridge.org/core/services/aop-cambridge-core/content/view/8E00A426E1C873462896B562046B2887/S0962728624000459a.pdf/understanding-kitten-fostering-and-socialisation-practices-using-mixed-methods.pdf"},
+ asvSpay:{t:"Pediatric spay and neuter (summary of ASV guidelines and AVMA position)",o:"Alley Cat Allies",ev:"consumer",u:"https://www.alleycat.org/earlyage"},
+ permethrin:{t:"Permethrin spot-on intoxication of cats (Journal of Feline Medicine and Surgery)",o:"PubMed Central",ev:"study",u:"https://pmc.ncbi.nlm.nih.gov/articles/pmid/17627861"},
+ wavd:{t:"Moriello KA et al. Diagnosis and treatment of dermatophytosis in dogs and cats: WAVD Clinical Consensus Guidelines. Veterinary Dermatology, 2017",o:"World Association for Veterinary Dermatology",ev:"guide",u:"https://ufl.pb.unizin.org/app/uploads/sites/51/2021/05/2017-WSAVA-Guidelines-for-Diagnosis-and-Treatment-of-Dermatophytosis.pdf"},
+ maddiesRing:{t:"Ringworm treatment in shelter cats (summary of Moriello et al., Veterinary Dermatology 2013)",o:"Maddie's Fund",ev:"shelter",u:"https://chewonthis.maddiesfund.org/?p=257"},
+ aafpHouse:{t:"House-soiling (AAFP/ISFM guidelines, client version)",o:"American Association of Feline Practitioners & International Society of Feline Medicine",ev:"guide",u:"https://catvets.com/wp-content/uploads/2024/01/HouseSoiling-B&W.pdf"},
+ catfriendly:{t:"House-soiling brochure",o:"Cat Friendly Homes (AAFP)",ev:"vet",u:"https://catfriendly.com/brochures/house-soiling.pdf"}
+};
+function srcBlock(ids){
+ if(!ids||!ids.length) return `<div class="note unverified"><strong>Not yet source-checked.</strong> This section reflects common foster practice. Confirm with your foster organization.</div>`;
+ return `<h4>Sources</h4><ul class="srcs">${ids.map(i=>{const x=SRC[i];return `<li><a href="${x.u}" target="_blank" rel="noopener">${x.t}</a><span class="ev ev-${x.ev}">${EV[x.ev]}</span><span class="org">${x.o}</span></li>`}).join("")}</ul>`;
+}
+
+/* ---------- navigation ---------- */
+let stack=[{v:"home"}];
+const cur=()=>stack[stack.length-1];
+function go(view){stack.push(view);render();window.scrollTo(0,0);}
+function back(){if(stack.length>1)stack.pop();render();window.scrollTo(0,0);}
+function home(){stack=[{v:"home"}];render();window.scrollTo(0,0);}
+const topic=id=>T.find(t=>t.id===id);
+const tool=id=>TOOLS.find(t=>t.id===id);
+
+function bar(){return stack.length>1?`<div class="topbar"><button class="back" onclick="back()">‹ Back</button><button class="home" onclick="home()">Start over</button></div>`:""}
+
+function linkRow(id,stage){
+ const tp=topic(id),tl=tool(id);
+ if(tp) return `<button class="row" onclick='go({v:"topic",id:"${id}",stage:${stage?`"${stage}"`:"null"}})'><div><span class="t">${tp.title}</span><span class="d">${tp.quick}</span></div><span class="tag">${CATS[tp.cat]}</span></button>`;
+ if(tl) return `<button class="row" onclick='go({v:"tool",id:"${id}",stage:${stage?`"${stage}"`:"null"}})'><div><span class="t">${tl.title}</span><span class="d">${tl.d}</span></div><span class="tag tool">Tool</span></button>`;
+ return "";
+}
+function stageTiles(sel,fn,small){
+ return `<div class="stages ${small?"small":""}">${ALL.map(k=>`<button class="stage" aria-pressed="${sel===k}" onclick="${fn}('${k}')"><div class="art">${STAGES[k].art()}</div><strong>${STAGES[k].name}</strong><span>${STAGES[k].age}</span></button>`).join("")}</div>`;
+}
+
+/* ---------- views ---------- */
+function vHome(){
+ return `<header><h1>Foster cat care guide</h1><p class="muted">Find exactly what you need for the cat or kitten in your care.</p></header>
+ <input class="search" id="q" type="search" placeholder="Search: fleas, bottle feeding, spraying…" oninput="doSearch(this.value)" aria-label="Search topics">
+ <div id="results"></div>
+ <div id="homebody">
+  <button class="urgent" onclick='go({v:"triage",stage:null})'><strong>Something wrong right now?</strong><span>Start from the symptom and get next steps.</span></button>
+  <h2>Who are you fostering?</h2>${stageTiles(null,"pickStage")}
+  <h2>Tools</h2><div class="list">${TOOLS.map(t=>linkRow(t.id,null)).join("")}</div>
+  <div class="list"><button class="row" onclick='go({v:"about"})'><div><span class="t">About the sources</span><span class="d">Where this information comes from and how to judge it</span></div></button></div>
+ </div>`;
+}
+window.pickStage=k=>go({v:"stage",stage:k,cat:"general"});
+window.doSearch=q=>{
+ q=q.trim().toLowerCase();const r=$("#results"),b=$("#homebody");
+ if(!q){r.innerHTML="";b.hidden=false;return;}
+ b.hidden=true;
+ const hit=s=>s.toLowerCase().includes(q);
+ const tops=T.filter(t=>hit(t.title)||hit(t.kw)||hit(t.quick));
+ const tls=TOOLS.filter(t=>hit(t.title)||hit(t.d));
+ const sy=SYM.filter(s=>hit(s.label));
+ const rows=[...sy.map(s=>`<button class="row" onclick='go({v:"triage",stage:null,sym:"${s.id}"})'><div><span class="t">${s.label}</span><span class="d">Get next steps now</span></div><span class="tag now">Right now</span></button>`),...tls.map(t=>linkRow(t.id)),...tops.map(t=>linkRow(t.id))];
+ r.innerHTML=rows.length?`<div class="list">${rows.join("")}</div>`:`<p class="muted" style="margin-top:1rem">No matches. Try a simpler word like "fleas" or "feeding".</p>`;
+};
+
+function vStage(s){
+ const st=STAGES[s.stage];
+ let items;
+ if(s.cat==="tools") items=TOOLS.filter(t=>t.st.includes(s.stage)).map(t=>linkRow(t.id,s.stage));
+ else items=T.filter(t=>t.cat===s.cat&&t.st.includes(s.stage)).map(t=>linkRow(t.id,s.stage));
+ return `${bar()}<h3>${st.name}</h3><p class="muted">${st.age}</p>
+ <button class="urgent" onclick='go({v:"triage",stage:"${s.stage}"})'><strong>Something wrong right now?</strong><span>Symptom checker for ${st.plural}.</span></button>
+ <div class="chips" role="tablist" style="margin-top:1.2rem">${Object.entries(CATS).map(([k,v])=>`<button class="chip" role="tab" aria-selected="${s.cat===k}" onclick="setCat('${k}')">${v}</button>`).join("")}</div>
+ <p class="overview">${OVERVIEW[s.stage][s.cat]}</p>
+ <div class="list">${items.join("")}</div>`;
+}
+window.setCat=k=>{cur().cat=k;render();};
+
+function vTopic(s){
+ const t=topic(s.id);const st=s.stage;
+ const note=st&&t.notes&&t.notes[st];
+ const otherNotes=t.notes?Object.entries(t.notes).filter(([k])=>k!==st):[];
+ return `${bar()}<div class="crumbs">${st?STAGES[st].name+" › ":""}${CATS[t.cat]}</div>
+ <div class="panel fade"><h3>${t.title}</h3>
+  <p class="applies">For ${t.st.map(k=>STAGES[k].plural).join(", ")}</p>
+  <p class="quick">${t.quick}</p>
+  ${note?`<div class="note"><strong>For ${STAGES[st].plural}:</strong> ${note}</div>`:""}
+  <h4>What to do</h4><ul>${t.steps.map(x=>`<li>${x}</li>`).join("")}</ul>
+  ${!st&&otherNotes.length?otherNotes.map(([k,v])=>`<div class="note"><strong>For ${STAGES[k].plural}:</strong> ${v}</div>`).join(""):""}
+  ${t.vet?`<div class="vet"><h4>Call your vet if you see</h4><ul>${t.vet.map(x=>`<li>${x}</li>`).join("")}</ul></div>`:""}
+  ${srcBlock(t.src)}
+ </div>
+ ${t.rel&&t.rel.length?`<h2>Related</h2><div class="list">${t.rel.map(r=>linkRow(r,st)).join("")}</div>`:""}`;
+}
+
+function vTriage(s){
+ const pick=`<h3>What's happening?</h3><p class="muted">Pick who it is, then the main symptom.</p>
+  <h2>Who is it?</h2>${stageTiles(s.stage,"triStage",true)}`;
+ if(!s.stage) return bar()+pick;
+ if(!s.sym){
+  const list=SYM.filter(x=>x.lv[s.stage]);
+  return bar()+pick+`<h2>Main symptom</h2><div class="list">${list.map(x=>`<button class="row" onclick="triSym('${x.id}')"><div><span class="t">${x.label}</span></div></button>`).join("")}</div>`;
+ }
+ const x=SYM.find(y=>y.id===s.sym);const lv=x.lv[s.stage];
+ if(!lv) return bar()+pick+`<p class="muted" style="margin-top:1rem">"${x.label}" doesn't apply to ${STAGES[s.stage].plural}. Pick another stage or <button class="chip" onclick="triSym(null)">choose a different symptom</button></p>`;
+ return `${bar()}<div class="crumbs">${STAGES[s.stage].name} › Right now</div><h3>${x.label}</h3>
+ <div class="level ${lv} fade"><strong>${LV[lv]}</strong><p>${lv==="watch"?"Usually not urgent, but move up to a vet call if anything below appears.":lv==="today"?"Contact your vet or foster coordinator today.":"Don't wait. Call ahead while you're on the way if you can."}</p></div>
+ <div class="panel"><h4 style="margin-top:0">What to do now</h4><ul>${x.now.map(n=>`<li>${n}</li>`).join("")}</ul>
+ <div class="vet"><h4>Go to a vet now if</h4><ul>${x.go.map(n=>`<li>${n}</li>`).join("")}</ul></div></div>
+ <h2>Learn more</h2><div class="list">${x.rel.map(r=>linkRow(r,s.stage)).join("")}</div>`;
+}
+window.triStage=k=>{const c=cur();c.stage=k;if(c.sym&&!SYM.find(y=>y.id===c.sym).lv[k])c.sym=null;render();};
+window.triSym=id=>{if(id)go({v:"triage",stage:cur().stage,sym:id});else{cur().sym=null;render();}};
+
+/* ---------- tools ---------- */
+const AGEBY=[[150,"under 1 week"],[250,"about 1–2 weeks"],[350,"about 2–3 weeks"],[450,"about 3–4 weeks"],[550,"about 4–5 weeks"]];
+const FEEDROWS=[[100,"Newborn"],[150,"~1 week"],[250,"~2 weeks"],[350,"~3 weeks"],[450,"~4 weeks"],[550,"~5 weeks"]];
+const FREQ=[[150,12,"every 2 hours"],[250,10,"every 2–3 hours"],[350,7,"every 3–4 hours"],[450,5,"every 4–5 hours"],[9999,4,"every 5–6 hours, plus gruel"]];
+function feedFor(g){
+ const daily=g*0.27;          /* 20 kcal/100 g/day ÷ 0.74 kcal/mL ≈ 27 mL/100 g/day */
+ const cap=g*0.04;            /* stomach capacity ≈ 4 mL/100 g per feeding */
+ const [,n,every]=FREQ.find(f=>g<=f[0]);
+ const per=Math.min(daily/n,cap);
+ return {daily,cap,n,every,per,short:daily/n>cap};
+}
+function tFeed(){
+ return `<p>Enter the kitten's weight on a gram scale. The calculator uses the energy and stomach-capacity figures in Maddie's Fund's feeding table: about 20 kcal per 100 g of body weight a day, and no more than 4 mL per 100 g at one feeding.</p>
+ <div class="inline"><div><label for="fw">Weight</label><input id="fw" type="number" inputmode="decimal" min="1" placeholder="e.g. 220" style="width:9rem"></div>
+ <div><label for="fu">Unit</label><select id="fu"><option value="g">grams</option><option value="oz">ounces</option></select></div>
+ <button class="btn" onclick="calcFeed()">Calculate</button></div><div id="fr"></div>
+ <div class="scroll" style="margin-top:1.4rem"><table><thead><tr><th>Weight</th><th>Typical age</th><th>How often</th><th>Per feeding</th><th>Never more than</th></tr></thead><tbody>
+ ${FEEDROWS.map(([g,a])=>{const f=feedFor(g);return `<tr><td>${g} g</td><td>${a}</td><td>${f.every}</td><td>${f.per.toFixed(1)} mL</td><td>${Math.round(f.cap)} mL</td></tr>`}).join("")}</tbody></table></div>
+ <p class="muted" style="margin-top:.8rem">Assumes a milk replacer of about 0.74 kcal/mL. Check your formula's label; if its calorie density differs, the volumes change.</p>`;
+}
+window.calcFeed=()=>{
+ let w=parseFloat($("#fw").value);const u=$("#fu").value;const out=$("#fr");
+ if(!w||w<=0){out.innerHTML=`<div class="result">Enter a weight above zero.</div>`;return;}
+ const g=u==="oz"?w*28.35:w;
+ if(g>600){out.innerHTML=`<div class="result"><div class="big">Weaning or weaned</div><p>At ${Math.round(g)} g, kittens are usually eating gruel or solid food. Offer wet kitten food 4 or more times a day, keep weighing, and bottle-feed extra only if they aren't gaining.</p></div>`;return;}
+ const f=feedFor(g);const age=(AGEBY.find(a=>g<=a[0])||[0,"about 5 weeks"])[1];
+ out.innerHTML=`<div class="result"><div class="big">About ${f.per.toFixed(1)} mL ${f.every}</div>
+ <p>Typical for a kitten ${age} old. Don't exceed ${f.cap.toFixed(1)} mL in one feeding; more than that risks bloating, diarrhea, and aspiration.</p>
+ ${f.short?`<p>At this size, bottle feedings alone can't safely cover the full daily need (about ${Math.round(f.daily)} mL). That's normal at weaning age: add gruel between bottles.</p>`:`<p>Daily total about ${Math.round(f.daily)} mL, including overnight feedings.</p>`}
+ <p>Many kittens will take a little less; stop when they slow down or the belly is round but not tight. Steady daily weight gain is the real test.</p>
+ ${g<90?`<p><strong>Under 90 g is below normal birth weight.</strong> Stay in close contact with your vet.</p>`:""}</div>`;
+};
+
+const WKEY="foster-weight-log";
+function loadW(){try{return JSON.parse(localStorage.getItem(WKEY))||[]}catch(e){return[]}}
+function saveW(d){try{localStorage.setItem(WKEY,JSON.stringify(d))}catch(e){}}
+function tWeights(){
+ const today=new Date().toISOString().slice(0,10);
+ return `<p>Weigh at the same time each day on a gram scale. Entries are saved on this device.</p>
+ <div class="inline"><div><label for="wn">Name</label><input id="wn" placeholder="e.g. Pepper" style="width:9rem"></div>
+ <div><label for="wg">Grams</label><input id="wg" type="number" inputmode="numeric" min="1" style="width:7rem"></div>
+ <div><label for="wd">Date</label><input id="wd" type="date" value="${today}"></div>
+ <button class="btn" onclick="addW()">Add weight</button></div><p id="werr" class="loss"></p><div id="wlist">${wTable()}</div>`;
+}
+function wTable(){
+ const d=loadW();if(!d.length)return `<p class="muted" style="margin-top:1rem">No weights yet. Add your first entry above.</p>`;
+ const by={};d.forEach((e,i)=>{(by[e.n]=by[e.n]||[]).push({...e,i})});
+ return Object.entries(by).map(([n,es])=>{
+  es.sort((a,b)=>a.d.localeCompare(b.d));
+  const last=es[es.length-1],first=es[0];
+  const days=(new Date(last.d)-new Date(first.d))/864e5;
+  const avg=days>0?((last.g-first.g)/days).toFixed(1):null;
+  const rows=es.slice().reverse().map((e,k,arr)=>{const prev=arr[k+1];const ch=prev?e.g-prev.g:null;
+   return `<tr><td>${e.d}</td><td>${e.g} g</td><td class="${ch===null?"":ch<0?"loss":"gain"}">${ch===null?"–":(ch>0?"+":"")+ch+" g"}</td><td><button class="btn ghost" style="padding:.2rem .6rem" onclick="delW(${e.i})" aria-label="Delete entry">✕</button></td></tr>`}).join("");
+  const lost=es.length>1&&last.g<es[es.length-2].g;
+  return `<h4>${esc(n)}</h4>${lost?`<div class="vet" style="margin-top:.4rem"><strong>Weight went down.</strong> For infants, any loss or no gain over 24 hours needs a vet call today.</div>`:""}
+  ${avg!==null?`<p class="muted">Average ${avg} g/day since ${first.d}. Nursing kittens typically gain 10–15 g/day and double birth weight in about 10 days; bottle-fed kittens often grow a bit slower (about 14 days to double).</p>`:""}
+  <div class="scroll"><table><thead><tr><th>Date</th><th>Weight</th><th>Change</th><th></th></tr></thead><tbody>${rows}</tbody></table></div>`;
+ }).join("")+`<button class="btn ghost" style="margin-top:1.2rem" onclick="clearW()">Clear all weights</button>`;
+}
+window.addW=()=>{
+ const n=$("#wn").value.trim(),g=parseInt($("#wg").value,10),d=$("#wd").value,err=$("#werr");
+ if(!n||!g||g<=0||!d){err.textContent="Enter a name, a weight in grams, and a date.";return;}
+ err.textContent="";const all=loadW();all.push({n,g,d});saveW(all);$("#wg").value="";$("#wlist").innerHTML=wTable();
+};
+window.delW=i=>{const all=loadW();all.splice(i,1);saveW(all);$("#wlist").innerHTML=wTable();};
+window.clearW=()=>{if(confirm("Delete all saved weights?")){saveW([]);$("#wlist").innerHTML=wTable();}};
+
+function blob(fill,shape){
+ const s={formed:`<rect x="8" y="16" width="44" height="14" rx="7" fill="${fill}"/>`,
+  soft:`<path d="M10 30 Q12 16 30 18 Q50 16 50 30 Z" fill="${fill}"/>`,
+  paste:`<ellipse cx="30" cy="26" rx="22" ry="8" fill="${fill}"/>`,
+  pudding:`<path d="M6 30 Q14 22 22 28 Q30 20 38 28 Q46 22 54 30 Z" fill="${fill}"/>`,
+  liquid:`<ellipse cx="30" cy="30" rx="25" ry="4" fill="${fill}" opacity=".8"/>`}[shape];
+ return `<svg width="60" height="36" viewBox="0 0 60 36" aria-hidden="true">${s}</svg>`;
+}
+const STOOL={
+ consistency:[
+  {k:"formed",l:"Firm, formed",shape:"formed",lv:"watch",t:"Healthy for weaned kittens and adults.",tag:"Normal"},
+  {k:"soft",l:"Soft, holds shape",shape:"soft",lv:"watch",t:"Often fine, especially during diet changes. Keep an eye on it.",tag:"Mostly normal"},
+  {k:"paste",l:"Toothpaste",shape:"paste",lv:"watch",t:"Normal for bottle-fed infants. Soft for weaned kittens; watch for it getting looser.",tag:"Normal for infants"},
+  {k:"pudding",l:"Pudding, no shape",shape:"pudding",lv:"today",t:"Diarrhea. Check hydration, save a sample, and call your vet if it lasts beyond 24 hours (sooner for young kittens).",tag:"Monitor"},
+  {k:"liquid",l:"Watery",shape:"liquid",lv:"today",t:"Significant diarrhea with a high dehydration risk. Call your vet today; go now if the kitten is weak.",tag:"Call vet"}
+ ],
+ color:[
+  {k:"yellow",l:"Mustard yellow",c:"#D9A93B",lv:"watch",t:"Normal for kittens on formula."},
+  {k:"brown",l:"Brown",c:"#7A4E2A",lv:"watch",t:"Normal for kittens on solid food and adults."},
+  {k:"green",l:"Green",c:"#6E8A3A",lv:"today",t:"Can mean food moving too fast, overfeeding, or infection. Call your vet if it continues or comes with diarrhea."},
+  {k:"gray",l:"Gray or white",c:"#BDB8AE",lv:"today",t:"Can mean poor digestion or absorption. Call your vet."},
+  {k:"red",l:"Red streaks",c:"#B23A2E",lv:"today",t:"Fresh blood, often from colon irritation or parasites. Call your vet today."},
+  {k:"black",l:"Black, tarry",c:"#2A2420",lv:"emergency",t:"Can mean bleeding higher in the gut. Go to a vet now."}
+ ],
+ other:[
+  {k:"worms",l:"Spaghetti worms",lv:"watch",t:"Roundworms. Contact your vet for deworming and wash hands carefully."},
+  {k:"rice",l:"Rice-like bits",lv:"watch",t:"Tapeworm segments. Treat fleas and ask for tapeworm dewormer."},
+  {k:"mucus",l:"Mucus or jelly",lv:"today",t:"Intestinal irritation, often from coccidia or giardia. Bring a sample to the vet."},
+  {k:"none",l:"No poop in 48 hrs",lv:"today",t:"Possible constipation. For infants, stimulate after every meal and call your vet."}
+ ]
+};
+function tStool(){
+ const grp=(title,arr,fn)=>`<h4>${title}</h4><div class="swatches">${arr.map(x=>`<button class="sw" data-k="${x.k}" onclick="stoolPick(this,'${title}','${x.k}')">${fn(x)}<span>${x.l}</span></button>`).join("")}</div>`;
+ return `<p>Tap what you see for what it means and what to do.</p>
+ ${grp("Consistency",STOOL.consistency,x=>blob("var(--muted)",x.shape))}
+ ${grp("Color",STOOL.color,x=>`<svg width="60" height="36" viewBox="0 0 60 36" aria-hidden="true"><rect x="10" y="10" width="40" height="18" rx="9" fill="${x.c}"/></svg>`)}
+ ${grp("Other signs",STOOL.other,()=>"")}
+ <div id="sr"></div>`;
+}
+window.stoolPick=(el,g,k)=>{
+ document.querySelectorAll(".sw").forEach(b=>b.setAttribute("aria-pressed","false"));el.setAttribute("aria-pressed","true");
+ const arr=g==="Consistency"?STOOL.consistency:g==="Color"?STOOL.color:STOOL.other;const x=arr.find(y=>y.k===k);
+ $("#sr").innerHTML=`<div class="level ${x.lv} fade"><strong>${x.l}: ${LV[x.lv]}</strong><p>${x.t}</p></div>`;
+ $("#sr").scrollIntoView({block:"nearest"});
+};
+
+const AGE=[
+ {m:"Umbilical cord still attached",a:"0–3 days",c:"Bottle feed every 2 hours and keep very warm."},
+ {m:"Eyes closed, ears folded flat",a:"Under 1 week",c:"Bottle feed every 2 hours; stimulate to potty after each meal."},
+ {m:"Eyes opening, still blue",a:"1–2 weeks",c:"Bottle feed every 2–3 hours; protect eyes from bright light."},
+ {m:"Ears standing up, wobbly crawling",a:"2–3 weeks",c:"Bottle feed every 3–4 hours; still needs potty help."},
+ {m:"Tiny front teeth, starting to walk",a:"3–4 weeks",c:"Start a shallow litter box and begin weaning soon."},
+ {m:"Walking well, playing, canine teeth in",a:"4–5 weeks",c:"Offer gruel and a litter box; start socialization."},
+ {m:"Eating wet food, running and pouncing",a:"5–8 weeks",c:"Weaning; first vaccines and deworming."},
+ {m:"Eyes changing from blue to adult color",a:"7 weeks and up",c:"Vaccine series, spay/neuter around 2 lb."},
+ {m:"About 2 pounds",a:"About 8 weeks",c:"Often ready for spay/neuter and adoption. Rule of thumb: about 1 lb per month of age."},
+ {m:"Adult canine teeth coming in",a:"About 4–6 months",c:"Adult teeth finish by about 6 months."}
+];
+function tAge(){
+ return `<p>Tap the description that best matches the kitten.</p><div class="list">${AGE.map((x,i)=>`<button class="row" onclick="agePick(${i})"><div><span class="t">${x.m}</span></div></button>`).join("")}</div><div id="ar"></div>`;
+}
+window.agePick=i=>{const x=AGE[i];$("#ar").innerHTML=`<div class="result fade"><div class="big">About ${x.a}</div><p>${x.c}</p></div>`;$("#ar").scrollIntoView({block:"nearest"});};
+
+function tVax(){
+ return `<p>Enter a birth date (or estimate it with the age estimator). Choose the schedule your organization follows.</p>
+ <div class="inline"><div><label for="vm">Schedule</label><select id="vm" onchange="$('#vbl').textContent=this.value==='adult'?'Intake date':'Birth date'">
+ <option value="shelter">Kitten, shelter/foster protocol</option><option value="pet">Kitten, pet-clinic guideline</option><option value="adult">Adult cat</option></select></div>
+ <div><label for="vbd" id="vbl">Birth date</label><input id="vbd" type="date"></div>
+ <button class="btn" onclick="calcVax()">Make schedule</button></div><div id="vr"></div>`;
+}
+window.calcVax=()=>{
+ const v=$("#vbd").value,m=$("#vm").value,out=$("#vr");
+ if(!v){out.innerHTML=`<div class="result">Choose a date first.</div>`;return;}
+ const base=new Date(v+"T12:00:00");const add=w=>{const d=new Date(base);d.setDate(d.getDate()+Math.round(w*7));return d;};
+ const fmt=d=>d.toLocaleDateString(undefined,{month:"short",day:"numeric",year:"numeric"});
+ const today=new Date();today.setHours(0,0,0,0);
+ let ev=[];
+ if(m==="adult"){
+  ev=[[0,"FVRCP #1, deworm, FeLV/FIV test"],[0,"Rabies if not current (per local law)"],[2.5,"FVRCP booster (2–3 weeks after intake)"]];
+ } else {
+  [2,4,6,8,12,16,20,24].forEach(w=>ev.push([w,"Deworm"+(w>8?" (monthly)":"")]));
+  const fv=m==="shelter"?[4,6,8,10,12,14,16,18]:[6,9,12,15,18];
+  fv.forEach((w,i)=>ev.push([w,`FVRCP #${i+1}`]));
+  ev.push([8,"FeLV test, then FeLV #1"],[11,"FeLV #2"],[12,"Rabies (no earlier than 12 weeks; per label and law)"],[8,"Spay/neuter eligible if 2 lb and healthy"]);
+ }
+ const byDate={};ev.forEach(([w,l])=>{const k=w;(byDate[k]=byDate[k]||[]).push(l)});
+ const rows=Object.keys(byDate).map(Number).sort((a,b)=>a-b).map(w=>{const d=add(w);const past=d<today;
+  return `<tr><td class="${past?"muted":""}">${fmt(d)}</td><td>${m==="adult"?"":Math.round(w*10)/10+" wk"}</td><td>${byDate[w].join("; ")}${past?" (past)":""}</td></tr>`}).join("");
+ out.innerHTML=`<div class="scroll" style="margin-top:1rem"><table><thead><tr><th>Date</th><th>${m==="adult"?"":"Age"}</th><th>What</th></tr></thead><tbody>${rows}</tbody></table></div>
+ <p class="muted" style="margin-top:.8rem">${m==="shelter"?"Shelter protocol: FVRCP from 4 weeks, every 2–3 weeks (shown every 2) until 16–20 weeks.":m==="pet"?"Pet-clinic guideline: FVRCP no earlier than 6 weeks, every 3–4 weeks until 16–20 weeks.":"Shelter guideline for adults: FVRCP at intake and 2–3 weeks later."} Deworming follows parasite-council guidance. Your vet or organization sets the final plan.</p>`;
+};
+
+function vTool(s){
+ const t=tool(s.id);
+ const body={feedcalc:tFeed,weights:tWeights,stool:tStool,age:tAge,vaxplan:tVax}[s.id]();
+ return `${bar()}<div class="crumbs">${s.stage?STAGES[s.stage].name+" › ":""}Tools</div><div class="panel fade"><h3>${t.title}</h3>${body}${srcBlock(t.src)}</div>`;
+}
+
+
+function vAbout(){
+ const groups=Object.keys(EV).map(k=>[k,Object.values(SRC).filter(x=>x.ev===k)]).filter(g=>g[1].length);
+ const unchecked=T.filter(t=>!t.src).map(t=>t.title);
+ return `${bar()}<div class="panel fade"><h3>About the sources</h3>
+ <p class="quick">Medical guidance in this guide was checked in September 2026 against veterinary guidelines, peer-reviewed research, and shelter-medicine references. Each topic lists its sources and labels the type of evidence.</p>
+ <h4>How to read the labels</h4><ul>
+  <li><strong>Peer-reviewed guideline or research:</strong> the strongest evidence here, written or reviewed by veterinary specialists.</li>
+  <li><strong>Peer-reviewed vet reference:</strong> the Merck Veterinary Manual, reviewed by specialists.</li>
+  <li><strong>Veterinary school or specialist:</strong> expert-written but not formally peer reviewed.</li>
+  <li><strong>Shelter medicine resource:</strong> Maddie's Fund, ASPCApro, and university shelter programs. Practical and widely used, often based on textbook references.</li>
+  <li><strong>Vet-reviewed consumer article:</strong> sites like PetMD. Used only to support stronger sources.</li>
+ </ul>
+ <div class="note"><strong>Limits:</strong> Much of foster care, such as enrichment, toys, and household routines, has little formal research behind it. Those topics are marked as not yet source-checked. Popular resources like Kitten Lady and ASPCA consumer pages are useful but are not peer reviewed. None of this replaces your veterinarian or your organization's protocols.</div>
+ <h4>Topics not yet source-checked</h4><p class="muted">${unchecked.join(", ")}</p>
+ ${groups.map(([k,arr])=>`<h4>${EV[k]}</h4><ul class="srcs">${arr.map(x=>`<li><a href="${x.u}" target="_blank" rel="noopener">${x.t}</a><span class="org">${x.o}</span></li>`).join("")}</ul>`).join("")}
+ </div>`;
+}
+
+function render(){
+ const s=cur();
+ $("#app").innerHTML=({home:vHome,stage:vStage,topic:vTopic,triage:vTriage,tool:vTool,about:vAbout})[s.v](s);
+}
+render();
+if(FEEDBACK_URL){document.getElementById("fb").innerHTML=`<a href="${FEEDBACK_URL}" target="_blank" rel="noopener" style="color:var(--blue);font-weight:700">Send feedback</a><br>`;}
+</script>
+</body>
+</html>
